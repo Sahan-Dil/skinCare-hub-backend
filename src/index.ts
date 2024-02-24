@@ -17,6 +17,10 @@ app.get('/', (req, res) => {
   res.send('Hello, world!')
 })
 
+app.get('/register', (req, res) => {
+  res.send('Hello, register!')
+})
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI!, {
  dbName:'skincarehub'
