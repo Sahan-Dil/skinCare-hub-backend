@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true })) // Parse URL-encoded bodies
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGODB_URI!, {
-    dbName: 'skincarehub',
+    dbName: 'skincarehub'
   })
   .then(() => {
     console.log('Connected to MongoDB')

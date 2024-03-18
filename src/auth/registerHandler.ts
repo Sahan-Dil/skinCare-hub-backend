@@ -7,22 +7,22 @@ const registerHandler = async (req: Request, res: Response) => {
     // Validation
     if (!req.body.userName || !req.body.email || !req.body.password) {
       return res.status(400).send({
-        message: 'Send all required fields: userName, email, and password',
+        message: 'Send all required fields: userName, email, and password'
       })
     }
 
     const newUser = {
       userName: req.body.userName,
       email: req.body.email,
-      password: await bcrypt.hash(req.body.password, 10),
+      password: await bcrypt.hash(req.body.password, 10)
     }
 
     const existingUser = await User.findOne({
-      $or: [{ userName: newUser.userName }, { email: newUser.email }],
+      $or: [{ userName: newUser.userName }, { email: newUser.email }]
     })
     if (existingUser) {
       return res.status(400).send({
-        message: 'User with the same email or username already exists',
+        message: 'User with the same email or username already exists'
       })
     }
 
@@ -31,9 +31,11 @@ const registerHandler = async (req: Request, res: Response) => {
 
     // Send a success response
     return res.status(201).send(user)
-  } catch (error: any) {
-    console.error(error.message)
-    return res.status(500).send({ message: error.message })
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+    return res.status(500).send({ message: 'Internal Server Error' })
   }
 }
 

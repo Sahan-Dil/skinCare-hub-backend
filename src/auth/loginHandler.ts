@@ -8,7 +8,7 @@ const loginHandler = async (req: Request, res: Response) => {
     // Validate request body
     if (!req.body.userName || !req.body.password) {
       return res.status(400).send({
-        message: 'Send all required fields: userName and password',
+        message: 'Send all required fields: userName and password'
       })
     }
 
@@ -31,8 +31,10 @@ const loginHandler = async (req: Request, res: Response) => {
 
     // Send token in response
     return res.status(200).send({ token })
-  } catch (error: any) {
-    console.error(error.message)
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
     return res.status(500).send({ message: 'Internal Server Error' })
   }
 }
