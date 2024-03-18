@@ -1,39 +1,38 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import express from 'express'
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import authRouter from './auth/router'
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config()
 
 // Create an Express application
-const app = express();
+const app = express()
 
 // Define middleware
-app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(express.json()) // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })) // Parse URL-encoded bodies
 
-// Define routes
+// Connect to MongoDB
+mongoose
+  .connect(process.env.MONGODB_URI!, {
+    dbName: 'skincarehub',
+  })
+  .then(() => {
+    console.log('Connected to MongoDB')
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error)
+  })
+
+// Use centralized routers
+app.use('/auth', authRouter)
 app.get('/', (req, res) => {
   res.send('Hello, world!')
 })
 
-app.get('/register', (req, res) => {
-  res.send('Hello, register!')
-})
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI!, {
- dbName:'skincarehub'
-})
-.then(() => {
-  console.log('Connected to MongoDB');
-})
-.catch((error) => {
-  console.error('Error connecting to MongoDB:', error);
-});
-
 // Start the Express server
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 4000
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+  console.log(`Server is running on port ${port}`)
+})
